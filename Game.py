@@ -134,3 +134,19 @@ class Game:
                 if self.computeStrToImg(self.boardState[y][x]) != None:
                     self.win.blit(self.computeStrToImg(
                         self.boardState[y][x]), (x * 100, y * 100))
+
+    def startDrag(self, mouseX, mouseY):
+        x = int(mouseX / 100)
+        y = int(mouseY / 100)
+
+        if self.boardState[y][x] != 0:
+            piece = self.boardState[y][x]
+            self.boardState[y][x] = 0
+            return piece
+        else:
+            return 0
+
+    def endDrag(self, piece, mouseX, mouseY):
+        x = int(mouseX / 100)
+        y = int(mouseY / 100)
+        self.boardState[y][x] = piece

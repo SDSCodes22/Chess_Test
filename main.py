@@ -7,6 +7,12 @@ import Game
 
 
 def main():
+    # get some dumb global variables
+    global draggedPiece
+    global dragging
+    global moved
+    global lastMovedPos
+    dragging = False
 
     # initialize the pygame module
     pygame.init()
@@ -38,6 +44,31 @@ def main():
             if event.type == pygame.QUIT:
                 # change the value to False, to exit the main loop
                 running = False
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                x, y = event.pos
+                draggedPiece = game.startDrag(x, y)
+                dragging = True
+                lastMovedPos = event.pos
+
+            if event.type == pygame.MOUSEMOTION:
+                if dragging:
+                    moved = True
+                    if game.computeStrToImg(draggedPiece) != None:
+                        x, y = event.pos
+                        win.blit(game.computeStrToImg(
+                            draggedPiece), (x - 50, y - 50))
+                        lastMovedPos = event.pos
+
+            if event.type == pygame.MOUSEBUTTONUP:
+                x, y = event.pos
+                dragging = False
+                game.endDrag(draggedPiece, x, y)
+
+        if dragging:
+            if game.computeStrToImg(draggedPiece) != None:
+                x, y = lastMovedPos
+                win.blit(game.computeStrToImg(draggedPiece), (x - 50, y - 50))
 
         clock.tick(60)
         pygame.display.update()
