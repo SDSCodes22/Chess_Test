@@ -1,5 +1,6 @@
 # import pygame, like yeah, quite simple
 import pygame
+import time
 
 # create the Game Class
 # this class will be responsible for handling game events, like the player moving a piece, or checking if a move is legal
@@ -17,7 +18,7 @@ class Game:
                            [0, 0, 0, 0, 0, 0, 0, 0],
                            [0, 0, 0, 0, 0, 0, 0, 0],
                            ['WP', 'WP', 'WP', 'WP', 'WP', 'WP', 'WP', 'WP'],
-                           ['WR', 'WN', 'BB', 'BQ', 'BK', 'BB', 'BN', 'BR']]
+                           ['WR', 'WN', 'WB', 'WQ', 'WK', 'WB', 'WN', 'WR']]
 
     # this function, pretty self-explainatory, will draw the board. aka: the brown and peach squares
     def drawBoard(self):
@@ -119,6 +120,17 @@ class Game:
 
         elif piece == 'BP':
             img = pygame.transform.scale(
-                pygame.image.load('Sprites/BP.png'), (100, 100))
+                pygame.image.load('Sprites/B_P.png'), (100, 100))
 
             return img
+
+    # this function will draw the pieces
+    def drawPieces(self):
+        # get an x value
+        for x in range(8):
+            # get a y value
+            for y in range(8):
+                # blit the piece onto the screen with the help of the function computeStrToImg
+                if self.computeStrToImg(self.boardState[y][x]) != None:
+                    self.win.blit(self.computeStrToImg(
+                        self.boardState[y][x]), (x * 100, y * 100))

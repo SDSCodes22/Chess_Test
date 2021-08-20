@@ -29,6 +29,8 @@ def main():
     while running:
         # draw the game board(visually)
         game.drawBoard()
+        # draw the pieces
+        game.drawPieces()
 
         # event handling, gets all event from the event queue
         for event in pygame.event.get():
