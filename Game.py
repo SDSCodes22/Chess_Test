@@ -146,7 +146,104 @@ class Game:
         else:
             return 0
 
-    def endDrag(self, piece, mouseX, mouseY):
-        x = int(mouseX / 100)
-        y = int(mouseY / 100)
-        self.boardState[y][x] = piece
+    def endDrag(self, piece, startPos, endPos):
+        if piece != 0:
+
+            if self.checkIfMoveLegal(startPos, endPos, piece):
+
+                if list(piece)[1] == 'P':
+                    if endPos[1] == 0 and list(piece)[0] == 'W':
+                        self.boardState[endPos[1]][endPos[0]] = (
+                            list(piece)[0] + 'Q')
+
+                    elif endPos[1] == 7 and list(piece)[0] == 'B':
+
+                        self.boardState[endPos[1]][endPos[0]] = (
+                            list(piece)[0] + 'Q')
+                    else:
+                        self.boardState[endPos[1]][endPos[0]] = piece
+
+                else:
+                    self.boardState[endPos[1]][endPos[0]] = piece
+            else:
+                self.boardState[int(startPos[1])][int(startPos[0])] = piece
+
+    def checkIfMoveLegal(self, startPos, endPos, piece):
+        if piece != 0:
+            # checking legal moves for rooks
+            if list(piece)[1] == 'R':
+                # debug
+                print('Checking A Rook')
+                # checking if rook is moving vertically
+                if startPos[0] == endPos[0]:
+                    print('The Rook was going vertically')
+                    print(startPos[0] < endPos[0], startPos[0], endPos[0])
+
+                    if startPos[1] < endPos[1]:
+                        print('The rook was going down')
+                        for i in range(startPos[1], endPos[1]):
+                            print('in Loop!')
+
+                            print(self.boardState[i][startPos[0]])
+
+                            if self.boardState[i][startPos[0]] != 0:
+
+                                if list(self.boardState[i][startPos[0]])[1] != 'R':
+
+                                    print('There was a piece in the way')
+                                    return False
+
+                        return True
+
+                    else:
+                        print('The rook was going up')
+                        for i in range(startPos[1], endPos[1], -1):
+                            print('in Loop!')
+                            print(self.boardState[i][startPos[0]])
+                            if self.boardState[i][startPos[0]] != 0:
+                                if list(self.boardState[i][startPos[0]])[1] != 'R':
+                                    print('There was a piece in the way')
+                                    return False
+                        return True
+
+                elif startPos[1] == endPos[1]:
+                    print('The Rook was going vertically')
+                    print(startPos[0] < endPos[0], startPos[0], endPos[0])
+
+                    if startPos[0] < endPos[0]:
+                        print('The rook was going right')
+                        for i in range(startPos[0], endPos[0]):
+                            print('in Loop!')
+
+                            print(self.boardState[startPos[1]][i])
+
+                            if self.boardState[startPos[1]][i] != 0:
+
+                                if list(self.boardState[startPos[1]][i])[1] != 'R':
+
+                                    print('There was a piece in the way')
+                                    return False
+
+                        return True
+
+                    else:
+                        print('The rook was going left')
+                        for i in range(startPos[0], endPos[0], -1):
+                            print('in Loop!')
+
+                            print(self.boardState[startPos[1]][i])
+
+                            if self.boardState[startPos[1]][i] != 0:
+                                print(self.boardState[startPos[1]][i])
+                                if list(self.boardState[startPos[1]][i])[1] != 'R':
+
+                                    print('There was a piece in the way')
+                                    return False
+
+                        return True
+                else:
+                    return False
+
+            else:
+                print('All good to go buddy!')
+                return True

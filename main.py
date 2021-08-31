@@ -12,7 +12,9 @@ def main():
     global dragging
     global moved
     global lastMovedPos
+    global startPos
     dragging = False
+    moved = False
 
     # initialize the pygame module
     pygame.init()
@@ -50,6 +52,7 @@ def main():
                 draggedPiece = game.startDrag(x, y)
                 dragging = True
                 lastMovedPos = event.pos
+                startPos = [int(x / 100), int(y / 100)]
 
             if event.type == pygame.MOUSEMOTION:
                 if dragging:
@@ -61,9 +64,14 @@ def main():
                         lastMovedPos = event.pos
 
             if event.type == pygame.MOUSEBUTTONUP:
-                x, y = event.pos
-                dragging = False
-                game.endDrag(draggedPiece, x, y)
+                if moved:
+                    x, y = event.pos
+                    dragging = False
+                    game.endDrag(draggedPiece, startPos,
+                                 (int(x / 100), int(y / 100)))
+                    print(startPos)
+                else:
+                    game.boardState[int(y / 100)][int(x / 100)] = draggedPiece
 
         if dragging:
             if game.computeStrToImg(draggedPiece) != None:
