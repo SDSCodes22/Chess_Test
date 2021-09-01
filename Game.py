@@ -169,43 +169,67 @@ class Game:
                 self.boardState[int(startPos[1])][int(startPos[0])] = piece
 
     def checkIfMoveLegal(self, startPos, endPos, piece):
+
         if piece != 0:
-            # checking legal moves for rooks
-            if list(piece)[1] == 'R':
+            # checking if the endPosition has a someone on it
+            if self.boardState[endPos[1]][endPos[0]] != 0:
                 # debug
-                print('Checking A Rook')
+                # print('OY, dont be toxic my dude!',
+                # self.boardState[endPos[1]][endPos[0]][0], list(piece)[0])
+                # if that person is a teammate
+                if list(self.boardState[endPos[1]][endPos[0]])[0] == list(piece)[0]:
+                    # make sure that that is false so that everybody knows that the player is toxic
+                    return False
+
+            # checking legal moves for rooks
+            elif list(piece)[1] == 'R':
+                # debug
+                #print('Checking A Rook')
                 # checking if rook is moving vertically
                 if startPos[0] == endPos[0]:
-                    print('The Rook was going vertically')
-                    print(startPos[0] < endPos[0], startPos[0], endPos[0])
+                    # debug
+                    #print('The Rook was going vertically')
+                    #print(startPos[0] < endPos[0], startPos[0], endPos[0])
 
+                    # if the rook was going down
                     if startPos[1] < endPos[1]:
-                        print('The rook was going down')
-                        for i in range(startPos[1], endPos[1]):
-                            print('in Loop!')
+                        # debug
+                        #print('The rook was going down')
+                        # loop through all of the Y positions t
+                        for i in range(startPos[1] + 1, endPos[1]):
+                            # debug
+                            #print('in Loop!')
+                            # print(self.boardState[i][startPos[0]])
 
-                            print(self.boardState[i][startPos[0]])
-
+                            # if there was a piece in the way
                             if self.boardState[i][startPos[0]] != 0:
+                                # debug
+                                print('There was a piece in the way')
+                                return False
 
-                                if list(self.boardState[i][startPos[0]])[1] != 'R':
-
-                                    print('There was a piece in the way')
-                                    return False
-
+                        # but, if nothing above triggered, it means that the move is valid
                         return True
 
+                    # then the rook must have been going up!
                     else:
-                        print('The rook was going up')
-                        for i in range(startPos[1], endPos[1], -1):
-                            print('in Loop!')
-                            print(self.boardState[i][startPos[0]])
+                        # debug
+                        #print('The rook was going up')
+                        # then loop through all of the Y positions between startPos and endPos
+                        for i in range(startPos[1] - 1, endPos[1], -1):
+                            # debug
+                            #print('in Loop!')
+                            # print(self.boardState[i][startPos[0]])
+
+                            # if there was a piece
                             if self.boardState[i][startPos[0]] != 0:
-                                if list(self.boardState[i][startPos[0]])[1] != 'R':
-                                    print('There was a piece in the way')
-                                    return False
+                                # debug
+                                #print('There was a piece in the way')
+
+                                return False
+                        # but, if nothing above triggered, it means that the move is valid
                         return True
 
+                # The below until "***STOPHERE***" is the same as the above, but with the X axis instead of the Y
                 elif startPos[1] == endPos[1]:
                     print('The Rook was going vertically')
                     print(startPos[0] < endPos[0], startPos[0], endPos[0])
@@ -241,9 +265,28 @@ class Game:
                                     return False
 
                         return True
+                # ***STOPHERE***
+                # but, if the rook was not going horizontally **or** vertically, it is invalid
                 else:
+                    # its invalid
                     return False
 
-            else:
-                print('All good to go buddy!')
-                return True
+            # if the piece is a bishop
+            elif list(piece)[1] == 'B':
+                # if the difference between the x of the startPos and endPos and the difference between the Y position of the startPos and endPos
+                if abs(startPos[0] - endPos[0]) == abs(startPos[1] - endPos[1]):
+                    # debug
+                    #print('Bishop Can GO!')
+                    # logically, that means that it is a diagonall move, meaning that the bishop can go!
+                    return True
+                # if it is not a diagonal move
+                else:
+                    # debug
+                    # print(
+                    #    f'Bishop can\'t go cuz he bad, look: {startPos[0] - endPos[0]}, {startPos[1] - endPos[1]}, {startPos[0] - endPos[0] == startPos[1] - endPos[1]}')
+                    # the move is invalid
+                    return False
+
+            # since I haven't done them yet, every other piece can move freely
+            #debug : print('All good to go buddy!')
+            return True
